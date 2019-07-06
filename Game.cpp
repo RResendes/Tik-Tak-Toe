@@ -82,7 +82,7 @@ bool Game::rowCrossed (char **board){
     { 
         if (board[i][0] == board[i][1] && 
             board[i][1] == board[i][2] &&  
-            board[i][0] != ' ') 
+            board[i][0] != '0') 
             return (true); 
     } 
     return(false); 
@@ -94,7 +94,7 @@ bool Game::columnCrossed(char **board)
     { 
         if (board[0][i] == board[1][i] && 
             board[1][i] == board[2][i] &&  
-            board[0][i] != ' ') 
+            board[0][i] != '0') 
             return (true); 
     } 
     return(false); 
@@ -104,12 +104,12 @@ bool Game::diagonalCrossed(char **board)
 { 
     if (board[0][0] == board[1][1] && 
         board[1][1] == board[2][2] &&  
-        board[0][0] != ' ') 
+        board[0][0] != '0') 
         return(true); 
           
     if (board[0][2] == board[1][1] && 
         board[1][1] == board[2][0] && 
-         board[0][2] != ' ') 
+         board[0][2] != '0') 
         return(true); 
   
     return(false); 
@@ -131,7 +131,8 @@ void Game::initialise (char **board, int moves[])
     for (int i=0; i<_LADO; i++) 
     { 
         for (int j=0; j<_LADO; j++) 
-            {board[i][j] = ' '; };
+            {
+                board[i][j] = '0'; };
     }
     //encher uma variavel array com a ordem dos movimentos
     for (int h=0; h<(_LADO*_LADO); h++)
@@ -152,7 +153,7 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
     {
         board[i] = new char[_LADO];
     }
-    
+    int chosenMoveIndex = -1 ;
        
     int moves[_LADO*_LADO];
     //inicializar as coordenadas da jogada e o nr da jogada
@@ -172,15 +173,17 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
         computerMove = 'X';
     }
     //loop para continuar o jogo ate uma das condiçoes se verificar
-    while (gameOver(board) == false && moveIndex != _LADO*_LADO)
+    while (gameOver(board) == true && moveIndex < _LADO*_LADO)
     {   
         if (whoseTurn == _COMPUTER){
             //estabelecer as coordenadas da jogada atravez da projeçao 2d duma matriz
             AiBot Bot1(charOption , board); 
-            cout << moveIndex << Bot1.board[0] << endl;
-            moveIndex = Bot1.findBestMove(charOption);
-            x = moveIndex / _LADO;
-            y = moveIndex % _LADO;
+            if (moveIndex==0) {chosenMoveIndex = 4;}
+            else {
+                chosenMoveIndex = Bot1.findBestMove(charOption);
+            }
+            x = chosenMoveIndex / _LADO;
+            y = chosenMoveIndex % _LADO;
              board[x][y] = computerMove;
             printf("O Computador pos o %c na casa nr %d \n",
                      computerMove , moves[moveIndex]+1);
@@ -189,10 +192,11 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
             whoseTurn == _HUMAN;
         } else if (whoseTurn == _HUMAN) { 
             //escolher a jogada
-            moveIndex = promptMove();
+            chosenMoveIndex = promptMove();
+            chosenMoveIndex-- ;
             //estabelecer as coordenadas da jogada atravez da projeçao 2d duma matriz
-            x = moves[moveIndex] / _LADO; 
-            y = moves[moveIndex] % _LADO; 
+            x = chosenMoveIndex / _LADO; 
+            y = chosenMoveIndex % _LADO; 
             board[x][y] = humanMove; 
             printf ("O jogador pos o %c na casa nr %d \n", 
                     humanMove, moves[moveIndex]+1); 

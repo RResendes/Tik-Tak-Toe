@@ -10,7 +10,6 @@ public:
     AiBot(char charOption, char **board);
     char humanMove = 'X', computerMove = 'O';
     int moveIndex;
-    char *board[3];
     struct Move;
     void charChoosing (char charOption);
     int move2dToIndex (int x, int y);

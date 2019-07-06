@@ -11,7 +11,13 @@ char **boardCpy;
 
 //defenir o simbolo de cada jogador
 AiBot::AiBot(char charOption, char **board)
-{
+{   
+    char **boardCpy = new char*[3];
+    for (int i = 0; i < 3; i++)
+    {
+        board[i] = new char[3];
+    }
+    boardCpy = board;
     if (charOption == 'x')
     {
         this->humanMove = 'X';
