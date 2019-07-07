@@ -103,11 +103,11 @@ int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
 
     // se o maximizer ganhou
     if (score == 10)
-        return score;
+        return score-depth;
 
     // se o minimizer ganhar
     if (score == -10)
-        return score;
+        return score+depth;
 
     //em caso de empate
     if (movesLeft(boardCpy) == 0)
@@ -130,13 +130,14 @@ int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
                     // chamar o minimax recursivamente e escolher o maior valor
                     // com a funçao max()
                     best = max(best,
-                               miniMax(boardCpy, depth + 1, ! isMax, charOption));
+                               miniMax(boardCpy, depth + 1, !isMax, charOption));
 
                     // desfazer
                     boardCpy[i][j] = '\0';
                 }
             }
         }
+        printf("%d\n", best);
         return best;
     }
 
@@ -165,6 +166,7 @@ int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
             }
         }
         //retorna o valor do quadro
+        printf("%d\n", best);
         return best;
     }
 }
@@ -181,8 +183,8 @@ int AiBot::findBestMove(char charOption)
     int bestMove[2];
     bestMove.row = -1;
     bestMove.col = -1; */
-    int bestVal = -1;
-    int bestMoveIndex = 0;
+    int bestVal = -1000;
+    int bestMoveIndex = -1;
     // Traverse all cells, evaluate minimax function for
     // all empty cells. And return the cell with optimal
     // value.
@@ -198,7 +200,9 @@ int AiBot::findBestMove(char charOption)
 
                 // compute evaluation function for this
                 // move.
+                printf("%d_______________!_________%d\n", i, j);
                 int moveVal = miniMax(boardCpy, 0, false, charOption);
+                printf("_________________%d_____________________\n", moveVal);
 
                 // Undo the move
                 boardCpy[i][j] = '\0';
