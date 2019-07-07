@@ -172,11 +172,7 @@ int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
 }
 //findBestMove(char** a = new char*[3])
 
-
-
-// Thois will return the best possible move for the player
-int AiBot::findBestMove(char charOption)
-{
+int AiBot::dificultyAdv(char charOption){
     /*board[0] = new char[3]
     board[0] = 'ab'
     int bestVal = -1000;
@@ -219,6 +215,16 @@ int AiBot::findBestMove(char charOption)
         }
     }
     return bestMoveIndex;
+
+}
+
+// Thois will return the best possible move for the player
+int AiBot::findBestMove(char charOption, int dificulty)
+{
+    switch(dificulty){
+        case 4:
+            return dificultyAdv(charOption);
+    }
 }
 
 

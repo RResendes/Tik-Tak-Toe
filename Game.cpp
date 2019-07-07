@@ -185,7 +185,8 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
             AiBot Bot1(charOption , board); 
             if (moveIndex==0) {chosenMoveIndex = 4;}
             else {
-                chosenMoveIndex = Bot1.findBestMove(charOption);
+                // difficulty adv = 4
+                chosenMoveIndex = Bot1.findBestMove(charOption, 4);
             }
             x = chosenMoveIndex / _LADO;
             y = chosenMoveIndex % _LADO;
