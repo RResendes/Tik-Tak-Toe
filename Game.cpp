@@ -82,7 +82,7 @@ bool Game::rowCrossed (char **board){
     { 
         if (board[i][0] == board[i][1] && 
             board[i][1] == board[i][2] &&  
-            board[i][0] != '0') 
+            board[i][0] != '\0') 
             return (true); 
     } 
     return(false); 
@@ -94,9 +94,9 @@ bool Game::columnCrossed(char **board)
     { 
         if (board[0][i] == board[1][i] && 
             board[1][i] == board[2][i] &&  
-            board[0][i] != '0') 
+            board[0][i] != '\0') 
             return (true); 
-    } 
+    }  
     return(false); 
 } 
 //diagonal igual
@@ -104,12 +104,12 @@ bool Game::diagonalCrossed(char **board)
 { 
     if (board[0][0] == board[1][1] && 
         board[1][1] == board[2][2] &&  
-        board[0][0] != '0') 
+        board[0][0] != '\0') 
         return(true); 
           
     if (board[0][2] == board[1][1] && 
         board[1][1] == board[2][0] && 
-         board[0][2] != '0') 
+         board[0][2] != '\0') 
         return(true); 
   
     return(false); 
@@ -118,8 +118,13 @@ bool Game::diagonalCrossed(char **board)
 // funçao que retorna true quando o jogo acaba e false quando nao esta numa posição vitoriosa
 bool Game::gameOver(char **board)
 {
-    return (rowCrossed(board) || columnCrossed(board) || diagonalCrossed(board) );
-
+    if (columnCrossed(board) || rowCrossed(board) || diagonalCrossed(board))
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 //funçao para inicializar o campo de jogo
 void Game::initialise (char **board, int moves[])
@@ -132,7 +137,7 @@ void Game::initialise (char **board, int moves[])
     { 
         for (int j=0; j<_LADO; j++) 
             {
-                board[i][j] = '0'; };
+                board[i][j] = '\0';};
     }
     //encher uma variavel array com a ordem dos movimentos
     for (int h=0; h<(_LADO*_LADO); h++)
@@ -173,7 +178,7 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
         computerMove = 'X';
     }
     //loop para continuar o jogo ate uma das condiçoes se verificar
-    while (gameOver(board) == true && moveIndex < _LADO*_LADO)
+    while (gameOver(board) == false && moveIndex < _LADO*_LADO)
     {   
         if (whoseTurn == _COMPUTER){
             //estabelecer as coordenadas da jogada atravez da projeçao 2d duma matriz
@@ -205,7 +210,6 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
             whoseTurn == _COMPUTER;
         } 
     }
-    // Caso de empate
     if (gameOver(board) == false && moveIndex == _LADO*_LADO){
         printf("Jogo resultou num empate");
     } else {
@@ -213,6 +217,7 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
         toggleWhoseTurn(whoseTurn);
         declareWinner(whoseTurn);
     }
+    // Caso de empate
 
     for(int i = 0; i < 3; ++i) {
         delete [] board[i];
