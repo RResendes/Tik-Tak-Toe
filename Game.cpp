@@ -190,24 +190,24 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
             x = chosenMoveIndex / _LADO;
             y = chosenMoveIndex % _LADO;
              board[x][y] = computerMove;
-            printf("O Computador pos o %c na casa nr %d \n",
-                     computerMove , moves[moveIndex]+1);
             drawBoard(board);
+            printf("O Computador pos o %c na casa nr %d \n",
+                     computerMove , chosenMoveIndex+1 );
             moveIndex ++;
-            whoseTurn == _HUMAN;
-        } else if (whoseTurn == _HUMAN) { 
+            whoseTurn = _HUMAN;
+        }
+        if (whoseTurn == _HUMAN) { 
             //escolher a jogada
             chosenMoveIndex = promptMove();
-            chosenMoveIndex-- ;
             //estabelecer as coordenadas da jogada atravez da projeçao 2d duma matriz
             x = chosenMoveIndex / _LADO; 
             y = chosenMoveIndex % _LADO; 
             board[x][y] = humanMove; 
-            printf ("O jogador pos o %c na casa nr %d \n", 
-                    humanMove, moves[moveIndex]+1); 
             drawBoard(board); 
+            printf ("O jogador pos o %c na casa nr %d \n", 
+                    humanMove, chosenMoveIndex-1); 
             moveIndex ++; 
-            whoseTurn == _COMPUTER;
+            whoseTurn = _COMPUTER;
         } 
     }
     if (gameOver(board) == false && moveIndex == _LADO*_LADO){
@@ -219,9 +219,6 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
     }
     // Caso de empate
 
-    for(int i = 0; i < 3; ++i) {
-        delete [] board[i];
-    }
-    delete [] board;
+    
     return;
 }

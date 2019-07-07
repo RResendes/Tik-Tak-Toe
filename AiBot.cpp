@@ -17,17 +17,7 @@ AiBot::AiBot(char charOption, char **board)
     {
         board[i] = new char[3];
     }
-    boardCpy = board;
-    if (charOption == 'x')
-    {
-        this->humanMove = 'X';
-        this->computerMove = 'O';
-    }
-    else if (charOption == 'o')
-    {
-        this->humanMove = 'O';
-        this->computerMove = 'X';
-    }
+    boardCpy = (&board[0]);
 }
 //transformar um x e um y num moveIndex
 int AiBot::move2dToIndex(int x, int y)
@@ -38,14 +28,14 @@ int AiBot::move2dToIndex(int x, int y)
 }
 
 // funçao para determinar quantos movimentos faltam no quadro
-int AiBot::movesLeft(char *board[3])
+int AiBot::movesLeft(char **boardCpy)
 {
     int movesLeft;
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            if (board[i][j] == ' ')
+            if (boardCpy[i][j] == '\0')
             {
                 movesLeft++;
             }
@@ -55,18 +45,18 @@ int AiBot::movesLeft(char *board[3])
 }
 
 // funçao que retorna uma pontuaçao vencedora ou perdedora avaliando uma matriz
-int AiBot::evaluate(char *b[3], char charOption)
+int AiBot::evaluate(char **boardCpy, char charOption)
 {
     //defenir os movimentos atravez da funçao
     // avaliar as linhas para ver se ha jogada vencedora
     for (int row = 0; row < 3; row++)
     {
-        if (b[row][0] == b[row][1] &&
-            b[row][1] == b[row][2])
+        if (boardCpy[row][0] == boardCpy[row][1] &&
+            boardCpy[row][1] == boardCpy[row][2])
         {
-            if (b[row][0] == computerMove)
+            if (boardCpy[row][0] == computerMove)
                 return +10;
-            else if (b[row][0] == humanMove)
+            else if (boardCpy[row][0] == humanMove)
                 return -10;
         }
     }
@@ -74,31 +64,31 @@ int AiBot::evaluate(char *b[3], char charOption)
     // avaliar as colunas para ver se ha jogada vencedora
     for (int col = 0; col < 3; col++)
     {
-        if (b[0][col] == b[1][col] &&
-            b[1][col] == b[2][col])
+        if (boardCpy[0][col] == boardCpy[1][col] &&
+            boardCpy[1][col] == boardCpy[2][col])
         {
-            if (b[0][col] == computerMove)
+            if (boardCpy[0][col] == computerMove)
                 return +10;
 
-            else if (b[0][col] == humanMove)
+            else if (boardCpy[0][col] == humanMove)
                 return -10;
         }
     }
 
     // avaliar as diagonais para ver se ha jogada vencedora
-    if (b[0][0] == b[1][1] && b[1][1] == b[2][2])
+    if (boardCpy[0][0] == boardCpy[1][1] && boardCpy[1][1] == boardCpy[2][2])
     {
-        if (b[0][0] == computerMove)
+        if (boardCpy[0][0] == computerMove)
             return +10;
-        else if (b[0][0] == humanMove)
+        else if (boardCpy[0][0] == humanMove)
             return -10;
     }
 
-    if (b[0][2] == b[1][1] && b[1][1] == b[2][0])
+    if (boardCpy[0][2] == boardCpy[1][1] && boardCpy[1][1] == boardCpy[2][0])
     {
-        if (b[0][2] == computerMove)
+        if (boardCpy[0][2] == computerMove)
             return +10;
-        else if (b[0][2] == humanMove)
+        else if (boardCpy[0][2] == humanMove)
             return -10;
     }
 
@@ -106,10 +96,10 @@ int AiBot::evaluate(char *b[3], char charOption)
     return 0;
 }
 
-int AiBot::miniMax(char *board[3], int depth, bool isMax, char charOption)
+int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
 {
 
-    int score = evaluate(board, charOption);
+    int score = evaluate(boardCpy, charOption);
 
     // se o maximizer ganhou
     if (score == 10)
@@ -120,7 +110,7 @@ int AiBot::miniMax(char *board[3], int depth, bool isMax, char charOption)
         return score;
 
     //em caso de empate
-    if (movesLeft(board) == 0)
+    if (movesLeft(boardCpy) == 0)
         return 0;
 
     // se for o turno do maximizer
@@ -132,18 +122,18 @@ int AiBot::miniMax(char *board[3], int depth, bool isMax, char charOption)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (board[i][j] == '_')
+                if (boardCpy[i][j] == '\0')
                 {
                     // desenhar o movimento
-                    board[i][j] = computerMove;
+                    boardCpy[i][j] = computerMove;
 
                     // chamar o minimax recursivamente e escolher o maior valor
                     // com a funçao max()
                     best = max(best,
-                               miniMax(board, depth + 1, !isMax, charOption));
+                               miniMax(boardCpy, depth + 1, !isMax, charOption));
 
                     // desfazer
-                    board[i][j] = '_';
+                    boardCpy[i][j] = '\0';
                 }
             }
         }
@@ -159,18 +149,18 @@ int AiBot::miniMax(char *board[3], int depth, bool isMax, char charOption)
         {
             for (int j = 0; j < 3; j++)
             {
-                if (board[i][j] == '_')
+                if (boardCpy[i][j] == '\0')
                 {
                     // desenhar o movimento
-                    board[i][j] = humanMove;
+                    boardCpy[i][j] = humanMove;
 
                     // chamar o minimax recursivamente e escolher o menor valor
                     // com a funçao min()
                     best = min(best,
-                               miniMax(board, depth + 1, !isMax, charOption));
+                               miniMax(boardCpy, depth + 1, !isMax, charOption));
 
                     // desfazer
-                    board[i][j] = '_';
+                    boardCpy[i][j] = '\0';
                 }
             }
         }
@@ -191,8 +181,7 @@ int AiBot::findBestMove(char charOption)
     int bestMove[2];
     bestMove.row = -1;
     bestMove.col = -1; */
-    
-    int bestVal = -1000;
+    int bestVal = -1;
     int bestMoveIndex = 0;
     // Traverse all cells, evaluate minimax function for
     // all empty cells. And return the cell with optimal
@@ -202,7 +191,7 @@ int AiBot::findBestMove(char charOption)
         for (int j = 0; j < 3; j++)
         {
             // Check if cell is empty
-            if (boardCpy[i][j] == '_')
+            if (boardCpy[i][j] == '\0')
             {
                 // Make the move
                 boardCpy[i][j] = computerMove;
@@ -212,7 +201,7 @@ int AiBot::findBestMove(char charOption)
                 int moveVal = miniMax(boardCpy, 0, false, charOption);
 
                 // Undo the move
-                boardCpy[i][j] = '_';
+                boardCpy[i][j] = '\0';
 
                 // If the value of the current move is
                 // more than the best value, then update
@@ -225,10 +214,7 @@ int AiBot::findBestMove(char charOption)
             }
         }
     }
-    
-    printf("The value of the best Move is : %d\n\n",
-           bestVal);
-
+    cout << "dbug" << endl;
     return bestMoveIndex;
 }
 
