@@ -1,5 +1,6 @@
 #include <iostream>
 #include <bits/stdc++.h>
+#include <vector>
 #include "AiBot.h"
 
 using namespace std;
@@ -218,10 +219,32 @@ int AiBot::dificultyAdv(char charOption){
 
 }
 
+int AiBot::dificultyBasic(char charOption){
+    vector<int> emptyIndex; 
+    int randIndex, bestMoveIndex;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (boardCpy[i][j] == '\0'){
+                emptyIndex.push_back(move2dToIndex(i,j));
+            }
+        }
+    }
+    randIndex = rand() % emptyIndex.size();
+    bestMoveIndex = emptyIndex[randIndex];
+    printf("rand int %d\n", bestMoveIndex);
+
+
+    return bestMoveIndex;
+}
+
 // Thois will return the best possible move for the player
 int AiBot::findBestMove(char charOption, int dificulty)
 {
     switch(dificulty){
+        case 1:
+            return dificultyBasic(charOption);
+
         case 4:
             return dificultyAdv(charOption);
     }
