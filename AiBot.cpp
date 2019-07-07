@@ -12,12 +12,12 @@ char **boardCpy;
 //defenir o simbolo de cada jogador
 AiBot::AiBot(char charOption, char **board)
 {   
-    char **boardCpy = new char*[3];
+    boardCpy = new char*[3];
     for (int i = 0; i < 3; i++)
     {
-        board[i] = new char[3];
+        boardCpy[i] = new char[3];
+        boardCpy[i] = board[i];
     }
-    boardCpy = (&board[0]);
 }
 //transformar um x e um y num moveIndex
 int AiBot::move2dToIndex(int x, int y)
@@ -130,7 +130,7 @@ int AiBot::miniMax(char **boardCpy, int depth, bool isMax, char charOption)
                     // chamar o minimax recursivamente e escolher o maior valor
                     // com a funçao max()
                     best = max(best,
-                               miniMax(boardCpy, depth + 1, !isMax, charOption));
+                               miniMax(boardCpy, depth + 1, ! isMax, charOption));
 
                     // desfazer
                     boardCpy[i][j] = '\0';
@@ -214,7 +214,6 @@ int AiBot::findBestMove(char charOption)
             }
         }
     }
-    cout << "dbug" << endl;
     return bestMoveIndex;
 }
 
