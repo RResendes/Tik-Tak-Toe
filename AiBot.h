@@ -17,5 +17,9 @@ public:
     int evaluate (char **boardCpy, char charOption);
     int miniMax (char **boardCpy, int depth, bool isMax, char charOption);
     int findBestMove(char charOption, int dificulty);
+    int randomIndex(int size);
     int dificultyAdv(char charOption);
+    int dificultyElementary(char charOption);
+    int dificultyBasic(char charOption);
+    int dificultyMedium(char charOption);
 };

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <bits/stdc++.h>
+#include <vector>
 #include "AiBot.h"
 
 using namespace std;
@@ -218,10 +219,95 @@ int AiBot::dificultyAdv(char charOption){
 
 }
 
+int AiBot::randomIndex(int size){
+    return rand() % size;
+}
+
+int AiBot::dificultyElementary(char charOption){
+    vector<int> emptyIndex; 
+    int randIndex, bestMoveIndex;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (boardCpy[i][j] == '\0'){
+                emptyIndex.push_back(move2dToIndex(i,j));
+            }
+        }
+    }
+    randIndex = randomIndex(emptyIndex.size());
+    bestMoveIndex = emptyIndex[randIndex];
+
+
+    return bestMoveIndex;
+}
+
+int AiBot::dificultyBasic(char charOption){
+    vector<int> emptyIndex; 
+    int randIndex, bestMoveIndex;
+
+    // value.
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            // Check if cell is empty
+            if (boardCpy[i][j] == '\0') {
+                // Make the move
+                boardCpy[i][j] = computerMove;
+                int score = evaluate(boardCpy, charOption);
+                boardCpy[i][j] = '\0';
+
+                // se o maximizer ganhou
+                if (score == 10){
+                    return move2dToIndex(i,j);
+                }
+            }
+        }
+    }
+
+    return dificultyElementary(charOption);
+}
+
+int AiBot::dificultyMedium(char charOption) {
+    int preventPlayerWinIndex = -1;    
+    
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            // Check if cell is empty
+            if (boardCpy[i][j] == '\0') {
+                // Make the move
+                boardCpy[i][j] = computerMove;
+                // segmentation fault boardCpy
+                printf("%c lalalal\n", computerMove);
+                int score = evaluate(boardCpy, charOption);
+                printf("%d %d score ----> %d\n",i ,j, score);
+                boardCpy[i][j] = '\0';
+
+                // se o maximizer ganhou
+                if (score == 10){
+                    return move2dToIndex(i,j);
+                } else if (score == -10) {
+                    preventPlayerWinIndex = move2dToIndex(i,j);
+                } 
+            }
+        }
+    }
+    
+    if(preventPlayerWinIndex != -1){
+        return preventPlayerWinIndex;
+    }
+
+    return dificultyElementary(charOption);
+}
+
 // Thois will return the best possible move for the player
 int AiBot::findBestMove(char charOption, int dificulty)
 {
     switch(dificulty){
+        case 1:
+            return dificultyElementary(charOption);
+        case 2:
+            return dificultyBasic(charOption);
+        case 3:
+            return dificultyMedium(charOption);
         case 4:
             return dificultyAdv(charOption);
     }
