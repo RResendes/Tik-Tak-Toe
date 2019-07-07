@@ -16,5 +16,6 @@ public:
     int movesLeft (char **boardCpy);
     int evaluate (char **boardCpy, char charOption);
     int miniMax (char **boardCpy, int depth, bool isMax, char charOption);
-    int findBestMove(char charOption);
+    int findBestMove(char charOption, int dificulty);
+    int dificultyAdv(char charOption);
 };
