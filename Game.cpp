@@ -57,10 +57,10 @@ int Game::promptMove(){
 void Game::declareWinner (int whoseTurn)
 {
     if (whoseTurn == _COMPUTER ){
-        printf("O computador ganhou, tenta outra vez");
+        printf("Ganhaste a partida! Parabéns");
         cout << endl;
     }  else {
-        printf("Ganhaste a partida! Parabéns");
+        printf("O computador ganhou, tenta outra vez");
         cout << endl;
     }
     return;
@@ -195,8 +195,7 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
                      computerMove , chosenMoveIndex+1 );
             moveIndex ++;
             whoseTurn = _HUMAN;
-        }
-        if (whoseTurn == _HUMAN) { 
+        } else if (whoseTurn == _HUMAN) { 
             //escolher a jogada
             chosenMoveIndex = promptMove();
             //estabelecer as coordenadas da jogada atravez da projeçao 2d duma matriz
@@ -214,7 +213,6 @@ void Game::playTicTacToe(int whoseTurn, char charOption)
         printf("Jogo resultou num empate");
     } else {
         // dar toggle do turno para declar o vencedor
-        toggleWhoseTurn(whoseTurn);
         declareWinner(whoseTurn);
     }
     // Caso de empate
